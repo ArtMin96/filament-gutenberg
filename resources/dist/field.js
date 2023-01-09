@@ -1,3 +1,5 @@
+import resolveConfig from "tailwindcss/resolveConfig";
+
 document.addEventListener('alpine:init', () => {
     Alpine.data('gutenbergFormComponent', (config) => ({
         blockEditor: null,
@@ -29,7 +31,7 @@ document.addEventListener('alpine:init', () => {
                 Laraberg.removeEditor(editor);
             }
 
-            const { registeredCategories, state } = config
+            const { registeredCategories, state, colors } = config
 
             registeredCategories.forEach((category) => {
                 this.registerCategory(category[0], category[1])
@@ -41,19 +43,22 @@ document.addEventListener('alpine:init', () => {
                 ...{mediaUpload},
                 ...config,
                 ...{
-                    colors: [
-                        {
-                            'name': 'Amber',
-                            'slug': 'amber',
-                            'color': '#f59e0b'
-                        }
-                    ]
+                    colors: colors
                 }
             })
 
             console.log(Laraberg)
 
             console.log(state)
+
+            // this.$watch('state', () => {
+            //     console.log(this.$refs.gutenberg)
+            //     if (document.activeElement === this.$refs.gutenberg) {
+            //         return
+            //     }
+            //
+            //     this.$refs.gutenberg?.editor?.setContent(state);
+            // })
 
             // if (state) {
             //     Laraberg.setContent(state)

@@ -1,3 +1,5 @@
+import colors from 'tailwindcss/colors'
+
 document.addEventListener('alpine:init', () => {
     Alpine.data('gutenbergFormComponent', (config) => ({
         blockEditor: null,
@@ -31,9 +33,11 @@ document.addEventListener('alpine:init', () => {
 
             const { registeredCategories, state } = config
 
-            registeredCategories.forEach((category) => {
-                this.registerCategory(category[0], category[1])
-            })
+            if (registeredCategories.length) {
+                registeredCategories.forEach((category) => {
+                    this.registerCategory(category[0], category[1])
+                })
+            }
 
             const mediaUpload = ({filesList, onFileChange}) => {}
 
@@ -41,19 +45,22 @@ document.addEventListener('alpine:init', () => {
                 ...{mediaUpload},
                 ...config,
                 ...{
-                    colors: [
-                        {
-                            'name': 'Amber',
-                            'slug': 'amber',
-                            'color': '#f59e0b'
-                        }
-                    ]
+                    colors: this.colorPalette()
                 }
             })
 
-            console.log(Laraberg)
+            // console.log(Laraberg)
+            //
+            // console.log(state)
 
-            console.log(state)
+            // this.$watch('state', () => {
+            //     console.log(this.$refs.gutenberg)
+            //     if (document.activeElement === this.$refs.gutenberg) {
+            //         return
+            //     }
+            //
+            //     this.$refs.gutenberg?.editor?.setContent(state);
+            // })
 
             // if (state) {
             //     Laraberg.setContent(state)
@@ -65,6 +72,44 @@ document.addEventListener('alpine:init', () => {
 
             return data.select('core/editor')
                 .getEditedPostContent();
+        },
+
+        colorPalette() {
+            const { initializeDefaultColors, customColors } = config
+
+            let colorPalette = {};
+
+            if (customColors.length === 0) {
+                colorPalette = this.initializeDefaultColors();
+            } else {
+                colorPalette = initializeDefaultColors ?
+                    [...this.initializeDefaultColors(), ...customColors] :
+                    customColors;
+            }
+
+            return colorPalette
+        },
+
+        initializeDefaultColors() {
+            let colorPalette = [];
+
+            for ([colorName, palette] of Object.entries(colors)) {
+                if (
+                    typeof palette === 'object' &&
+                    !Array.isArray(palette) &&
+                    palette !== null
+                ) {
+                    for ([paletteNum, colorHex] of Object.entries(palette)) {
+                        colorPalette.push({
+                            name: `${this.capitalizeFirstLetter(colorName)} ${paletteNum}`,
+                            slug: `${colorName}-${paletteNum}`,
+                            color: colorHex
+                        })
+                    }
+                }
+            }
+
+            return colorPalette;
         },
 
         /**
@@ -97,6 +142,10 @@ document.addEventListener('alpine:init', () => {
             const { registerBlockTypes } = this.blocks
 
             registerBlockTypes(name, block)
+        },
+
+        capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
         }
     }))
 })
