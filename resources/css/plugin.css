@@ -1,5 +1,13 @@
 @tailwind utilities;
 
+.block-editor-container, .block-editor, .block-editor__header {
+    @apply rounded-t-lg;
+}
+
+.block-editor-container, .block-editor, .block-editor__content, .components-panel {
+    @apply rounded-b-lg;
+}
+
 .block-editor__header {
     @apply bg-white;
 }
@@ -17,7 +25,7 @@
 }
 
 .components-button[aria-label='Settings'].is-pressed:hover {
-    @apply bg-slate-800;
+    @apply bg-slate-700;
 }
 
 .components-button[aria-label='Settings']:not(.is-pressed):hover {
@@ -28,8 +36,8 @@
     @apply bg-blue-500;
 }
 
-.components-button.is-primary:hover {
-    @apply text-blue-500 bg-gray-200;
+.components-button[aria-label="Add block"].is-primary:hover {
+    @apply bg-blue-600;
 }
 
 .block-editor__content {
@@ -58,4 +66,9 @@
 
 .components-accessible-toolbar.block-editor-block-contextual-toolbar {
     @apply border-slate-200 shadow;
+}
+
+.block-editor-block-contextual-toolbar .block-editor-block-toolbar .components-toolbar,
+.block-editor-block-contextual-toolbar .block-editor-block-toolbar .components-toolbar-group {
+    @apply border-r-slate-300;
 }
