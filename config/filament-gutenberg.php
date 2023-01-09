@@ -5,14 +5,14 @@ return [
     'initialize_default_colors' => true,
 
     'colors' => [
-//        [
-//            'name' => 'Traffic purple',
-//            'slug' => 'traffic-purple',
-//            'color' => '#A03472'
-//        ]
+        //        [
+        //            'name' => 'Traffic purple',
+        //            'slug' => 'traffic-purple',
+        //            'color' => '#A03472'
+        //        ]
     ],
 
     'categories' => [
-//        ['Category name', 'value']
+        //        ['Category name', 'value']
     ],
 ];
