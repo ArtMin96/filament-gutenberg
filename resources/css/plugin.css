@@ -1,3 +1,61 @@
 @tailwind utilities;
 
+.block-editor__header {
+    @apply bg-white;
+}
 
+.block-editor__header .components-button {
+    @apply rounded-full shadow-none;
+}
+
+.components-button[aria-label='Settings'].is-pressed {
+    @apply bg-slate-600 text-slate-100;
+}
+
+.components-button[aria-label='Settings']:not(.is-pressed) {
+    @apply bg-slate-200 text-slate-600;
+}
+
+.components-button[aria-label='Settings'].is-pressed:hover {
+    @apply bg-slate-800;
+}
+
+.components-button[aria-label='Settings']:not(.is-pressed):hover {
+    @apply bg-slate-600 text-slate-100;
+}
+
+.components-button.is-primary {
+    @apply bg-blue-500;
+}
+
+.components-button.is-primary:hover {
+    @apply text-blue-500 bg-gray-200;
+}
+
+.block-editor__content {
+    @apply bg-slate-50;
+}
+
+.block-editor-inserter .block-editor-inserter__toggle {
+    @apply bg-slate-600 rounded-md;
+}
+
+.components-autocomplete__result.components-button.is-selected {
+    @apply shadow-none;
+}
+
+.components-autocomplete__results .components-autocomplete__result:hover {
+    @apply bg-blue-500 text-white;
+}
+
+.components-autocomplete__popover .components-popover__content {
+    @apply p-0.5;
+}
+
+.components-popover__content {
+    @apply outline-none shadow-md;
+}
+
+.components-accessible-toolbar.block-editor-block-contextual-toolbar {
+    @apply border-slate-200 shadow;
+}

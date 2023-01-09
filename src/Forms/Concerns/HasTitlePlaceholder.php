@@ -2,11 +2,13 @@
 
 namespace ArtMin96\FilamentGutenberg\Forms\Concerns;
 
+use Closure;
+
 trait HasTitlePlaceholder
 {
-    protected ?string $titlePlaceholder = null;
+    protected null|string|Closure $titlePlaceholder = null;
 
-    public function titlePlaceholder(string $title): static
+    public function titlePlaceholder(string|Closure $title): static
     {
         $this->titlePlaceholder = $title;
 
@@ -15,6 +17,6 @@ trait HasTitlePlaceholder
 
     public function getTitlePlaceholder(): ?string
     {
-        return $this->titlePlaceholder;
+        return $this->evaluate($this->titlePlaceholder);
     }
 }

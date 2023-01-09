@@ -7,6 +7,8 @@ document.addEventListener('alpine:init', () => {
         hooks: null,
 
         init() {
+            this.$nextTick(() => {})
+
             window.wp = window.Laraberg.wordpress;
 
             const { blockEditor, blocks, data, element, hooks } = window.wp;
@@ -21,8 +23,13 @@ document.addEventListener('alpine:init', () => {
         },
 
         initializeEditor() {
-            const { dispatch, select } = this.data
-            const { registeredCategories } = config
+            let editor = document.getElementById('laraberg__editor');
+
+            if (editor !== null) {
+                Laraberg.removeEditor(editor);
+            }
+
+            const { registeredCategories, state } = config
 
             registeredCategories.forEach((category) => {
                 this.registerCategory(category[0], category[1])
@@ -33,7 +40,31 @@ document.addEventListener('alpine:init', () => {
             Laraberg.init('laraberg__editor', {
                 ...{mediaUpload},
                 ...config,
+                ...{
+                    colors: [
+                        {
+                            'name': 'Amber',
+                            'slug': 'amber',
+                            'color': '#f59e0b'
+                        }
+                    ]
+                }
             })
+
+            console.log(Laraberg)
+
+            console.log(state)
+
+            // if (state) {
+            //     Laraberg.setContent(state)
+            // }
+        },
+
+        getContent() {
+            const { data } = window.wp
+
+            return data.select('core/editor')
+                .getEditedPostContent();
         },
 
         /**

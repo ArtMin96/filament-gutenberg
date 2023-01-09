@@ -2,11 +2,13 @@
 
 namespace ArtMin96\FilamentGutenberg\Forms\Concerns;
 
+use Closure;
+
 trait HasBodyPlaceholder
 {
-    protected ?string $bodyPlaceholder = null;
+    protected null|string|Closure $bodyPlaceholder = null;
 
-    public function bodyPlaceholder(string $body): static
+    public function bodyPlaceholder(string|Closure $body): static
     {
         $this->bodyPlaceholder = $body;
 
@@ -15,6 +17,6 @@ trait HasBodyPlaceholder
 
     public function getBodyPlaceholder(): ?string
     {
-        return $this->bodyPlaceholder;
+        return $this->evaluate($this->bodyPlaceholder);
     }
 }

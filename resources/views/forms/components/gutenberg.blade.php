@@ -12,7 +12,7 @@
     :state-path="$getStatePath()"
 >
     <div x-data="gutenbergFormComponent({
-        state: $wire.entangle('{{ $getStatePath() }}').defer,
+        state: $wire.{{ $applyStateBindingModifiers('entangle(\'' . $getStatePath() . '\')') }},
         registeredCategories: @js($getRegisteredCategories()),
         welcomeGuide: @js($getWelcomeGuide()),
         sidebar: true,
@@ -41,9 +41,14 @@
         postLock: {
             isLocked: false
         },
-    })">
+    })" wire:ignore>
+        <textarea x-text="$wire.{{ $applyStateBindingModifiers('entangle(\'' . $getStatePath() . '\')') }}"
+                  id="laraberg__editor"
+                  class="laraberg__editor"
+                  {{ $applyStateBindingModifiers('wire:model') }}="{{ $getStatePath() }}"
+                  hidden>
 
-        <textarea name="laraberg__editor" id="laraberg__editor" class="laraberg__editor" cols="30" rows="10"></textarea>
+        </textarea>
 
     </div>
 </x-dynamic-component>

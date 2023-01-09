@@ -1,116 +1,102 @@
 document.addEventListener('alpine:init', () => {
     Alpine.data('gutenbergFormComponent', (config) => ({
+        blockEditor: null,
+        data: null,
+        blocks: null,
+        element: null,
+        hooks: null,
+
         init() {
+            this.$nextTick(() => {})
+
             window.wp = window.Laraberg.wordpress;
 
+            const { blockEditor, blocks, data, element, hooks } = window.wp;
+
+            this.blockEditor = blockEditor;
+            this.data = data;
+            this.blocks = blocks;
+            this.element = element;
+            this.hooks = hooks;
+
             this.initializeEditor();
-            // window.wp = Laraberg.wordpress;
-
-            // const mediaUploaded = ({
-            //                            filesList,
-            //                            onFileChange
-            //                        }) => {}
-
-            // console.log(config)
-            // // const mediaUploaded = ({
-            // //      filesList,
-            // //      onFileChange
-            // // }) => {
-            // //     setTimeout(async () => {
-            // //         console.log()
-            // //     }, 100)
-            // // }
-            //
-            // Laraberg.init('laraberg__editor', {
-            //     ...{},
-            //     // ...{mediaUpload: mediaUploaded},
-            //     ...config
-            // })
-            //
-            // // console.log(window.wp, window.wp.data.select('core/edit-post'))
-            //
-            // this.toggleWelcomeGuild(config.welcomeGuide)
         },
 
         initializeEditor() {
-            let editor = document.getElementById("laraberg__editor");
+            let editor = document.getElementById('laraberg__editor');
 
             if (editor !== null) {
-                this.removeEditor();
-                editor.remove();
+                Laraberg.removeEditor(editor);
             }
 
-            Laraberg.init('laraberg__editor', {
-                ...{},
-                // ...{mediaUpload: mediaUploaded},
-                ...config
+            const { registeredCategories, state } = config
+
+            registeredCategories.forEach((category) => {
+                this.registerCategory(category[0], category[1])
             })
 
-            this.toggleWelcomeGuild()
+            const mediaUpload = ({filesList, onFileChange}) => {}
+
+            Laraberg.init('laraberg__editor', {
+                ...{mediaUpload},
+                ...config,
+                ...{
+                    colors: [
+                        {
+                            'name': 'Amber',
+                            'slug': 'amber',
+                            'color': '#f59e0b'
+                        }
+                    ]
+                }
+            })
+
+            console.log(Laraberg)
+
+            console.log(state)
+
+            // if (state) {
+            //     Laraberg.setContent(state)
+            // }
         },
 
-        removeEditor() {
-            try {
-                const blocks = window.wp
-                    .data
-                    .select('core/blocks')
-                    .getBlockTypes()
-                    .map(function (bt) {
-                        return bt.name;
-                    });
+        getContent() {
+            const { data } = window.wp
 
-                const {removeBlockTypes} = window.wp
-                    .data
-                    .dispatch('core/blocks');
+            return data.select('core/editor')
+                .getEditedPostContent();
+        },
 
-                const {__experimentalTearDownEditor, resetBlocks} = window.wp
-                    .data
-                    .dispatch('core/editor');
+        /**
+         * Adds a category to the category list
+         * @param {String} title - The title for the category (eg: My Category)
+         * @param {String} slug - The slug for the category (eg: my-category)
+         */
+        registerCategory(title, slug) {
+            const { dispatch, select } = this.data
 
-                removeBlockTypes(blocks);
-                __experimentalTearDownEditor();
-                resetBlocks(parse(config.state.initialValue))
-            } catch (e) {
-                console.log(e)
+            let category = {
+                slug: slug,
+                title: title
             }
 
-            if (((window.Laraberg || {}).editor || false) !== false) {
-                window.wp
-                    .element
-                    .unmountComponentAtNode(window.Laraberg.editor);
-            }
+            const currentCategories = select('core/blocks')
+                .getCategories()
+                .filter(item => item.slug !== category.slug)
 
-            window.Laraberg.editor = undefined;
+            dispatch('core/blocks')
+                .setCategories([ category, ...currentCategories ])
         },
 
-        registerCategories() {
-            window.Laraberg.registerCategories('Name', 'value');
-        },
+        /**
+         * Registers a custom block to the editor
+         * @param {String} name The namespaced name of the block (eg: my-module/my-block)
+         * @param {Object} block The Gutenberg block object
+         */
+        registerBlock(name, block) {
+            const { registerBlockTypes } = this.blocks
 
-        toggleWelcomeGuild() {
-            // const {toggleFeatures} = window.wp.data.dispatch('core/edit-post');
-            // const {isFeatureActive} = window.wp.data.select('core/edit-post');
-            //
-            // config.welcomeGuide
-            //     && isFeatureActive('welcomeGuild')
-            //     && toggleFeatures('welcomeGuide')
+            registerBlockTypes(name, block)
         }
-
-        // mediaUpload() {
-        //     ret
-        // }
     }))
 })
-
-// Laraberg.init('filament_gutenberg', {
-//     alignWide: true,
-//     imageEditing: true,
-//     canLockBlocks: false,
-//     disableCustomColors: false,
-//     disableCustomGradients: true,
-//     disableCustomFontSizes: false,
-//     enableCustomLineHeight: true,
-//     enableCustomUnits: true,
-//     enableCustomSpacing: true,
-//     codeEditingEnabled: true,
-// });

@@ -2,15 +2,17 @@
 
 namespace ArtMin96\FilamentGutenberg\Forms\Concerns;
 
+use Closure;
+
 trait CanConfigureHeight
 {
-    protected ?string $height = '100vh';
+    protected null|string|Closure $height = '100vh';
 
-    protected string $minHeight = '100vh';
+    protected null|string|Closure $minHeight = '100vh';
 
-    protected ?string $maxHeight = '';
+    protected null|string|Closure $maxHeight = '';
 
-    public function height(string $height): static
+    public function height(string|Closure $height): static
     {
         $this->height = $height;
 
@@ -19,22 +21,22 @@ trait CanConfigureHeight
 
     public function getHeight(): ?string
     {
-        return $this->height;
+        return $this->evaluate($this->height);
     }
 
-    public function minHeight(string $height): static
+    public function minHeight(string|Closure $height): static
     {
         $this->minHeight = $height;
 
         return $this;
     }
 
-    public function getMinHeight(): string
+    public function getMinHeight(): ?string
     {
-        return $this->minHeight;
+        return $this->evaluate($this->minHeight);
     }
 
-    public function maxHeight(string $height): static
+    public function maxHeight(string|Closure $height): static
     {
         $this->maxHeight = $height;
 
@@ -43,6 +45,6 @@ trait CanConfigureHeight
 
     public function getMaxHeight(): ?string
     {
-        return $this->maxHeight;
+        return $this->evaluate($this->maxHeight);
     }
 }

@@ -2,11 +2,13 @@
 
 namespace ArtMin96\FilamentGutenberg\Forms\Concerns;
 
+use Closure;
+
 trait HasAutosaveInterval
 {
-    protected int $autosaveInterval = 10;
+    protected null|int|Closure $autosaveInterval = 10;
 
-    public function autosaveInterval(int $interval): static
+    public function autosaveInterval(int|Closure $interval): static
     {
         $this->autosaveInterval = $interval;
 
@@ -15,6 +17,6 @@ trait HasAutosaveInterval
 
     public function getAutosaveInterval(): int
     {
-        return $this->autosaveInterval;
+        return $this->evaluate($this->autosaveInterval);
     }
 }
