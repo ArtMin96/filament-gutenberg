@@ -1,25 +1,27 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "artmin96/filament-gutenberg",
+    "description": "This is my package filament-gutenberg",
     "keywords": [
-        ":vendor_name",
+        "ArtMin96",
         "laravel",
-        ":package_slug"
+        "filament-gutenberg"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/artmin96/filament-gutenberg",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Arthur Minasyan",
+            "email": "artminasyanartwork@gmail.com",
             "role": "Developer"
         }
     ],
     "require": {
         "php": "^8.0",
         "filament/filament": "^2.0",
+        "illuminate/contracts": "^9.0",
         "spatie/laravel-package-tools": "^1.13.5",
-        "illuminate/contracts": "^9.0"
+        "unisharp/laravel-filemanager": "^2.5",
+        "van-ons/laraberg": "*"
     },
     "require-dev": {
         "laravel/pint": "^1.0",
@@ -38,13 +40,13 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories"
+            "ArtMin96\\FilamentGutenberg\\": "src",
+            "ArtMin96\\FilamentGutenberg\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests"
+            "ArtMin96\\FilamentGutenberg\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -67,10 +69,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "ArtMin96\\FilamentGutenberg\\FilamentGutenbergServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "FilamentGutenberg": "ArtMin96\\FilamentGutenberg\\Facades\\FilamentGutenberg"
             }
         }
     },
