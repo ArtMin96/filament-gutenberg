@@ -2,11 +2,11 @@
 
 namespace ArtMin96\FilamentGutenberg\Tests;
 
+use ArtMin96\FilamentGutenberg\FilamentGutenbergServiceProvider;
 use Filament\FilamentServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
-use ArtMin96\FilamentGutenberg\FilamentGutenbergServiceProvider;
 
 class TestCase extends Orchestra
 {
