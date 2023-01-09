@@ -1,5 +1,6 @@
 document.addEventListener('alpine:init', () => {
     Alpine.data('gutenbergFormComponent', (config) => ({
+        blockEditor: null,
         data: null,
         blocks: null,
         element: null,
@@ -8,8 +9,9 @@ document.addEventListener('alpine:init', () => {
         init() {
             window.wp = window.Laraberg.wordpress;
 
-            const { blocks, data, element, hooks } = window.wp;
+            const { blockEditor, blocks, data, element, hooks } = window.wp;
 
+            this.blockEditor = blockEditor;
             this.data = data;
             this.blocks = blocks;
             this.element = element;
@@ -19,14 +21,8 @@ document.addEventListener('alpine:init', () => {
         },
 
         initializeEditor() {
-            const { registeredCategories } = config;
-
-            let editor = document.getElementById("laraberg__editor");
-
-            // if (editor !== null) {
-            //     this.removeEditor();
-            //     editor.remove();
-            // }
+            const { dispatch, select } = this.data
+            const { registeredCategories } = config
 
             registeredCategories.forEach((category) => {
                 this.registerCategory(category[0], category[1])
@@ -35,46 +31,16 @@ document.addEventListener('alpine:init', () => {
             const mediaUpload = ({filesList, onFileChange}) => {}
 
             Laraberg.init('laraberg__editor', {
-                ...{},
                 ...{mediaUpload},
                 ...config,
-                ...{
-                    disabledCoreBlocks: [],
-                    sidebar: true
-                }
             })
-
-            // this.toggleWelcomeGuild()
         },
 
-        removeEditor() {
-            try {
-                const blocks = this.data
-                    .select('core/blocks')
-                    .getBlockTypes()
-                    .map(function (bt) {
-                        return bt.name;
-                    });
-
-                const {removeBlockTypes} = this.data.dispatch('core/blocks');
-
-                const {__experimentalTearDownEditor, resetBlocks} = this.data.dispatch('core/editor');
-
-                removeBlockTypes(blocks);
-                __experimentalTearDownEditor();
-                resetBlocks(parse(config.state.initialValue))
-            } catch (e) {
-                console.log(e)
-            }
-
-            if (((window.Laraberg || {}).editor || false) !== false) {
-                this.element
-                    .unmountComponentAtNode(window.Laraberg.editor);
-            }
-
-            window.Laraberg.editor = undefined;
-        },
-
+        /**
+         * Adds a category to the category list
+         * @param {String} title - The title for the category (eg: My Category)
+         * @param {String} slug - The slug for the category (eg: my-category)
+         */
         registerCategory(title, slug) {
             const { dispatch, select } = this.data
 
@@ -91,36 +57,15 @@ document.addEventListener('alpine:init', () => {
                 .setCategories([ category, ...currentCategories ])
         },
 
-        toggleWelcomeGuild() {
-            const {toggleFeatures} = this.data.dispatch('core/edit-post');
-            const {isFeatureActive} = this.data.select('core/edit-post');
+        /**
+         * Registers a custom block to the editor
+         * @param {String} name The namespaced name of the block (eg: my-module/my-block)
+         * @param {Object} block The Gutenberg block object
+         */
+        registerBlock(name, block) {
+            const { registerBlockTypes } = this.blocks
 
-            config.welcomeGuide
-                && isFeatureActive('welcomeGuild')
-                && toggleFeatures('welcomeGuide')
+            registerBlockTypes(name, block)
         }
     }))
-
-    // function registerCategories(categories) {
-    //
-    //     return categories;
-    //
-    //     // this.hooks.addFilter('block_categories_all', (categories) => {
-    //     //     console.log(categories)
-    //     //     // categories.push({'slug': 'name', 'title': 'name'})
-    //     //     //
-    //     //     // return categories;
-    //     //     // return {
-    //     //     //     ...categories,
-    //     //     //     ...{
-    //     //     //         'slug': 'Name 1',
-    //     //     //         'title': 'name1'
-    //     //     //     }
-    //     //     // };
-    //     // }, 10, 2)
-    //     //
-    //     // registeredCategories.forEach((category) => {
-    //     //     window.wp.registerCategories(category[0], category[1]);
-    //     // })
-    // }
 })

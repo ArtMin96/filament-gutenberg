@@ -32,20 +32,6 @@ class FilamentGutenbergServiceProvider extends PluginServiceProvider
         ];
     }
 
-    protected function getScripts(): array
-    {
-        parent::getScripts();
-
-        return [
-//            'plugin-filament-gutenberg-react' => 'https://unpkg.com/react@17.0.2/umd/react.production.min.js',
-//            'plugin-filament-gutenberg-react-dom' => 'https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js',
-//            'plugin-filament-gutenberg-moment' => 'https://unpkg.com/moment@2.24.0/min/moment.min.js',
-//            'plugin-filament-gutenberg-jquery' => 'https://code.jquery.com/jquery-3.6.0.min.js',
-//            'filament-gutenberg' => asset('vendor/laraberg/js/laraberg.js'),
-//            'plugin-filament-gutenberg' => __DIR__.'/../resources/dist/component.js',
-        ];
-    }
-
     protected function getBeforeCoreScripts(): array
     {
         parent::getBeforeCoreScripts();
