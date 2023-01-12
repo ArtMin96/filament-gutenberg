@@ -10,14 +10,14 @@ return [
         [
             'name' => 'My custom color',
             'slug' => 'traffic-purple',
-            'color' => '#A03472'
-        ]
+            'color' => '#A03472',
+        ],
 
-//        [
-//            'name' => 'Traffic purple',
-//            'slug' => 'amber-50',
-//            'color' => '#fffbeb'
-//        ]
+        //        [
+        //            'name' => 'Traffic purple',
+        //            'slug' => 'amber-50',
+        //            'color' => '#fffbeb'
+        //        ]
     ],
 
     'gradients' => [],
@@ -61,6 +61,6 @@ return [
     ],
 
     'categories' => [
-//        ['Category name', 'value']
+        //        ['Category name', 'value']
     ],
 ];
