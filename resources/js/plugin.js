@@ -11,7 +11,17 @@ document.addEventListener('alpine:init', () => {
         init() {
             this.$nextTick(() => {})
 
-            window.wp = window.Laraberg.wordpress;
+            const wordpress = window.Laraberg.wordpress;
+
+            const { dispatch } = wordpress.data;
+            const { parse } = wordpress.blocks;
+
+            // Fix: Laraberg.setContent is not a function
+            window.Laraberg.setContent = (input) => {
+                dispatch('block-editor').setBlocks(parse(input));
+            }
+
+            window.wp = wordpress;
 
             const { blockEditor, blocks, data, element, hooks } = window.wp;
 
@@ -25,7 +35,7 @@ document.addEventListener('alpine:init', () => {
         },
 
         initializeEditor() {
-            let editor = document.getElementById('laraberg__editor');
+            let editor = this.$refs.gutenberg;
 
             if (editor !== null) {
                 Laraberg.removeEditor(editor);
@@ -43,11 +53,22 @@ document.addEventListener('alpine:init', () => {
 
             Laraberg.init('laraberg__editor', {
                 ...{mediaUpload},
-                ...config,
                 ...{
-                    colors: this.colorPalette()
+                    disabledCoreBlocks: [],
+                    supportsLayout: true,
+                },
+                ...config,
+                ...{colors: this.colorPalette()},
+                ...{fontSizes: config.fontSizes},
+                ...{
+                    richEditingEnabled: true
                 }
-            })
+            });
+
+            const { dispatch } = this.data;
+
+            window.Laraberg.setContent('<!-- wp:paragraph --> <p>dada</p> <!-- /wp:paragraph -->');
+
 
             // console.log(Laraberg)
             //
@@ -83,7 +104,7 @@ document.addEventListener('alpine:init', () => {
                 colorPalette = this.initializeDefaultColors();
             } else {
                 colorPalette = initializeDefaultColors ?
-                    [...this.initializeDefaultColors(), ...customColors] :
+                    [...customColors, ...this.initializeDefaultColors()] :
                     customColors;
             }
 
@@ -130,7 +151,10 @@ document.addEventListener('alpine:init', () => {
                 .filter(item => item.slug !== category.slug)
 
             dispatch('core/blocks')
-                .setCategories([ category, ...currentCategories ])
+                .setCategories([
+                    ...(currentCategories || []),
+                    category
+                ])
         },
 
         /**

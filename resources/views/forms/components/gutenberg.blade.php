@@ -16,6 +16,7 @@
             registeredCategories: @js($getRegisteredCategories()),
             welcomeGuide: @js($getWelcomeGuide()),
             sidebar: true,
+            fixedToolbar: true,
             laravelFilemanager: @js($getLaravelFilemanager()),
             alignWide: @js($getAllowWide()),
             imageEditing: @js($getImageEditing()),
@@ -38,25 +39,21 @@
             titlePlaceholder: @js($getTitlePlaceholder()),
             bodyPlaceholder: @js($getBodyPlaceholder()),
             hasPermissionsToManageWidgets: true,
+            hasUploadPermissions: true,
             postLock: {
                 isLocked: false
             },
             initializeDefaultColors: @js(config('filament-gutenberg.initialize_default_colors')),
-            customColors: @js(config('filament-gutenberg.colors'))
-        }), {state: null}"
-         x-on:input.change="console.log(state, 'sec', {{ $getStatePath() }})"
-{{--         x-on:input.change="state = $event.target.value"--}}
+            customColors: @js(config('filament-gutenberg.colors')),
+            fontSizes: @js(config('filament-gutenberg.font-sizes')),
+        })"
          wire:ignore
     >
-        <textarea x-data="console.log({{ $getStatePath() }})" x-ref="gutenberg"
-                  x-on:change="state = $event.target.value"
-                  {{ $applyStateBindingModifiers('wire:model') }}="laraberg__editor"
+        <textarea x-ref="gutenberg"
+                  {{ $applyStateBindingModifiers('wire:model') }}="{{ $getStatePath() }}"
                   id="laraberg__editor"
-                  class="laraberg__editor"
-                  hidden>
-            <!-- wp:heading -->
-            <h2>Test Heading</h2>
-            <!-- /wp:heading -->
+                  class="laraberg__editor">
+
         </textarea>
 
     </div>

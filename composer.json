@@ -42,7 +42,10 @@
         "psr-4": {
             "ArtMin96\\FilamentGutenberg\\": "src",
             "ArtMin96\\FilamentGutenberg\\Database\\Factories\\": "database/factories"
-        }
+        },
+        "files": [
+            "src/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

@@ -36,8 +36,8 @@ class FilamentGutenbergServiceProvider extends PluginServiceProvider
         parent::getBeforeCoreScripts();
 
         return [
-            'plugin-filament-gutenberg-react' => 'https://unpkg.com/react@17.0.2/umd/react.production.min.js',
-            'plugin-filament-gutenberg-react-dom' => 'https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js',
+            'plugin-filament-gutenberg-react' => 'https://unpkg.com/react@18/umd/react.production.min.js',
+            'plugin-filament-gutenberg-react-dom' => 'https://unpkg.com/react-dom@18/umd/react-dom.production.min.js',
             'plugin-filament-gutenberg-moment' => 'https://unpkg.com/moment@2.24.0/min/moment.min.js',
             'plugin-filament-gutenberg-jquery' => 'https://code.jquery.com/jquery-3.6.0.min.js',
             'filament-gutenberg' => __DIR__.'/../resources/dist/laraberg.js',
@@ -69,6 +69,18 @@ class FilamentGutenbergServiceProvider extends PluginServiceProvider
     {
         parent::register();
 
+        $this->registerTailwindService();
+
         $this->mergeConfigFrom(base_path('vendor/van-ons/laraberg/config/laraberg.php'), 'laraberg');
+    }
+
+    protected function registerTailwindService(): void
+    {
+        $this->app->singleton(
+            'tailwind',
+            fn ($app) => new Tailwind(
+                $app->config->get('filament-gutenberg', [])
+            )
+        );
     }
 }
